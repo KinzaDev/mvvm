@@ -1,30 +1,57 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:mvvm/main.dart';
+import 'package:mvvm/view/home_screen.dart';
+import 'package:mvvm/view/login_screen.dart';
+import 'package:mvvm/view/signup_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('App renders splash screen and navigates to login when unauthenticated',
+      (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('MVVM Auth App'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle(const Duration(seconds: 3));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(LoginScreen), findsOneWidget);
+  });
+
+  testWidgets('App navigates to HomeScreen when token is present in SharedPreferences',
+      (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({'token': 'test_token_xyz'});
+    await tester.pumpWidget(const MyApp());
+
+    await tester.pumpAndSettle(const Duration(seconds: 3));
+
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('test_token_xyz'), findsOneWidget);
+  });
+
+  testWidgets('Can navigate from Login to SignUp and back to Login',
+      (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle(const Duration(seconds: 3));
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+
+    // Tap "Don't have an account? Sign Up"
+    await tester.tap(find.byWidgetPredicate((widget) =>
+        widget is RichText &&
+        widget.text.toPlainText().contains('Sign Up')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SignUpView), findsOneWidget);
+
+    // Tap "Already have an account? Login"
+    await tester.tap(find.byWidgetPredicate((widget) =>
+        widget is RichText &&
+        widget.text.toPlainText().contains('Login')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
   });
 }

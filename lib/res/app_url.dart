@@ -1,5 +1,5 @@
 class AppUrl {
-  static var baseUrl = 'https://reqres.in';
-  static var loginEndPoint = baseUrl + '/api/login';
-  static var registerApiEndPoint = baseUrl + '/api/register';
+  static const String baseUrl = 'https://reqres.in';
+  static const String loginEndPoint = '$baseUrl/api/login';
+  static const String registerApiEndPoint = '$baseUrl/api/register';
 }

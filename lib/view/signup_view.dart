@@ -6,14 +6,14 @@ import 'package:mvvm/utils/utils.dart';
 import 'package:mvvm/view_model/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpViewState extends State<SignUpView> {
   final ValueNotifier<bool> _togglePasswordVisibility = ValueNotifier<bool>(true);
 
   final TextEditingController _emailController = TextEditingController();
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Sign Up'),
         backgroundColor: AppColors.primaryBlue,
         foregroundColor: AppColors.whiteColor,
         centerTitle: true,
@@ -94,8 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: height * 0.085),
               RoundButton(
-                title: 'Login',
-                loading: authViewModel.loading,
+                title: 'Sign Up',
+                loading: authViewModel.signUpLoading,
                 onPress: () {
                   if (_emailController.text.trim().isEmpty) {
                     Utils.flushBarErrorMessage('Please enter email', context);
@@ -110,22 +110,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       'email': _emailController.text.trim(),
                       'password': _passwordController.text.trim(),
                     };
-                    authViewModel.loginApi(data, context);
+                    authViewModel.signUpApi(data, context);
                   }
                 },
               ),
               SizedBox(height: height * 0.02),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, RoutesName.signUp);
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pushReplacementNamed(context, RoutesName.login);
+                  }
                 },
                 child: RichText(
                   text: const TextSpan(
-                    text: "Don't have an account? ",
+                    text: 'Already have an account? ',
                     style: TextStyle(color: AppColors.blackColor, fontSize: 14),
                     children: [
                       TextSpan(
-                        text: 'Sign Up',
+                        text: 'Login',
                         style: TextStyle(
                           color: AppColors.primaryBlue,
                           fontWeight: FontWeight.bold,

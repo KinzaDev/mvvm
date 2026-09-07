@@ -6,16 +6,16 @@ class RoundButton extends StatelessWidget {
   final bool loading;
   final VoidCallback onPress;
   const RoundButton({
-    Key? key,
+    super.key,
     required this.title,
     this.loading = false,
     required this.onPress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPress,
+      onTap: loading ? null : onPress,
       child: Container(
         height: 40,
         width: 200,
