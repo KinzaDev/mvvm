@@ -1,8 +1,6 @@
 # mvvm
-
-A new Flutter project.
-
-## Getting Started
+login page with mvvm architecture in flutter
+# Getting Started
 
 This project is a starting point for a Flutter application.
 
