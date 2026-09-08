@@ -27,7 +27,7 @@ void main() {
     await tester.pumpAndSettle(const Duration(seconds: 3));
 
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text('test_token_xyz'), findsOneWidget);
+    expect(find.text('Movies List'), findsOneWidget);
   });
 
   testWidgets('Can navigate from Login to SignUp and back to Login',

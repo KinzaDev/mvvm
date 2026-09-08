@@ -53,7 +53,11 @@ class NetworkApiServices extends BaseApiServices {
         try {
           final decoded = jsonDecode(response.body);
           if (decoded is Map && decoded.containsKey('error')) {
-            throw BadRequestException(decoded['error'].toString());
+            final err = decoded['error'];
+            if (err is Map && err.containsKey('message')) {
+              throw BadRequestException(err['message'].toString());
+            }
+            throw BadRequestException(err.toString());
           }
         } catch (e) {
           if (e is AppException) rethrow;
@@ -61,16 +65,33 @@ class NetworkApiServices extends BaseApiServices {
         throw BadRequestException(response.body.toString());
       case 401:
       case 403:
-      case 404:
         try {
           final decoded = jsonDecode(response.body);
           if (decoded is Map && decoded.containsKey('error')) {
-            throw UnauthorisedException(decoded['error'].toString());
+            final err = decoded['error'];
+            if (err is Map && err.containsKey('message')) {
+              throw UnauthorisedException(err['message'].toString());
+            }
+            throw UnauthorisedException(err.toString());
           }
         } catch (e) {
           if (e is AppException) rethrow;
         }
         throw UnauthorisedException(response.body.toString());
+      case 404:
+        try {
+          final decoded = jsonDecode(response.body);
+          if (decoded is Map && decoded.containsKey('error')) {
+            final err = decoded['error'];
+            if (err is Map && err.containsKey('message')) {
+              throw FetchDataException(err['message'].toString());
+            }
+            throw FetchDataException(err.toString());
+          }
+        } catch (e) {
+          if (e is AppException) rethrow;
+        }
+        throw FetchDataException('Requested resource not found (404)');
       case 500:
       default:
         throw FetchDataException(

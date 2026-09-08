@@ -14,10 +14,14 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  final ValueNotifier<bool> _togglePasswordVisibility = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _togglePasswordVisibility = ValueNotifier<bool>(
+    true,
+  );
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: 'eve.holt@reqres.in');
+  final TextEditingController _passwordController =
+      TextEditingController(text: 'pistol');
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -58,10 +62,17 @@ class _SignUpViewState extends State<SignUpView> {
                 decoration: const InputDecoration(
                   hintText: 'Email',
                   labelText: 'Email',
-                  prefixIcon: Icon(Icons.alternate_email, color: AppColors.primaryBlue),
+                  prefixIcon: Icon(
+                    Icons.alternate_email,
+                    color: AppColors.primaryBlue,
+                  ),
                 ),
                 onFieldSubmitted: (value) {
-                  Utils.fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
+                  Utils.fieldFocusChange(
+                    context,
+                    _emailFocusNode,
+                    _passwordFocusNode,
+                  );
                 },
               ),
               const SizedBox(height: 20),
@@ -76,10 +87,14 @@ class _SignUpViewState extends State<SignUpView> {
                     decoration: InputDecoration(
                       hintText: 'Password',
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primaryBlue),
+                      prefixIcon: const Icon(
+                        Icons.lock_outline,
+                        color: AppColors.primaryBlue,
+                      ),
                       suffixIcon: InkWell(
                         onTap: () {
-                          _togglePasswordVisibility.value = !_togglePasswordVisibility.value;
+                          _togglePasswordVisibility.value =
+                              !_togglePasswordVisibility.value;
                         },
                         child: Icon(
                           _togglePasswordVisibility.value
@@ -100,11 +115,20 @@ class _SignUpViewState extends State<SignUpView> {
                   if (_emailController.text.trim().isEmpty) {
                     Utils.flushBarErrorMessage('Please enter email', context);
                   } else if (!_emailController.text.contains('@')) {
-                    Utils.flushBarErrorMessage('Please enter a valid email', context);
+                    Utils.flushBarErrorMessage(
+                      'Please enter a valid email',
+                      context,
+                    );
                   } else if (_passwordController.text.isEmpty) {
-                    Utils.flushBarErrorMessage('Please enter password', context);
+                    Utils.flushBarErrorMessage(
+                      'Please enter password',
+                      context,
+                    );
                   } else if (_passwordController.text.length < 6) {
-                    Utils.flushBarErrorMessage('Please enter 6 digit password', context);
+                    Utils.flushBarErrorMessage(
+                      'Please enter 6 digit password',
+                      context,
+                    );
                   } else {
                     Map<String, String> data = {
                       'email': _emailController.text.trim(),
@@ -138,7 +162,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

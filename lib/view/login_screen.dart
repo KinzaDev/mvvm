@@ -16,8 +16,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final ValueNotifier<bool> _togglePasswordVisibility = ValueNotifier<bool>(true);
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: 'eve.holt@reqres.in');
+  final TextEditingController _passwordController =
+      TextEditingController(text: 'cityslicka');
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();

@@ -3,6 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
+  static double averageRating(List<dynamic>? ratings) {
+    if (ratings == null || ratings.isEmpty) {
+      return 0.0;
+    }
+    var avgRating = 0.0;
+    int count = 0;
+    for (int i = 0; i < ratings.length; i++) {
+      final val = ratings[i];
+      if (val is num) {
+        avgRating += val;
+        count++;
+      } else if (val != null) {
+        final parsed = double.tryParse(val.toString());
+        if (parsed != null) {
+          avgRating += parsed;
+          count++;
+        }
+      }
+    }
+    if (count == 0) return 0.0;
+    return avgRating / count;
+  }
+
   static void fieldFocusChange(
       BuildContext context, FocusNode current, FocusNode nextFocus) {
     current.unfocus();
